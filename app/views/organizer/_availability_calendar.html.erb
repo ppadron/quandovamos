@@ -1,0 +1,12 @@
+<%# locals: (event:, availability_names_by_slot_id:, unanimous_slot_id_set:) %>
+<% if event.all_day? %>
+  <%= render "organizer/availability_all_day",
+        event: event,
+        availability_names_by_slot_id: availability_names_by_slot_id,
+        unanimous_slot_id_set: unanimous_slot_id_set %>
+<% else %>
+  <%= render "organizer/availability_timed",
+        event: event,
+        availability_names_by_slot_id: availability_names_by_slot_id,
+        unanimous_slot_id_set: unanimous_slot_id_set %>
+<% end %>

@@ -1,0 +1,38 @@
+<%# locals: (event:, guest:) %>
+<% slots_by_date = event_slots_indexed_by_local_date(event) %>
+<div class="space-y-8">
+  <% months_covering_event_slots(event).each do |month_start| %>
+    <div class="calendar-card">
+      <div class="calendar-card-body space-y-4">
+        <h3 class="card-title text-lg"><%= "#{I18n.t("date.month_names")[month_start.month]} de #{month_start.year}" %></h3>
+        <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-base-content/60">
+          <% calendar_weekday_abbrs.each do |w| %>
+            <div><%= w %></div>
+          <% end %>
+        </div>
+        <div class="grid grid-cols-7 gap-1">
+          <% calendar_day_cells_for_month(month_start.year, month_start.month).each do |cell_date| %>
+            <% if cell_date.nil? %>
+              <div class="aspect-square min-h-[2.75rem]"></div>
+            <% else %>
+              <% slot = slots_by_date[cell_date] %>
+              <% if slot %>
+                <div class="flex aspect-square min-h-[3.5rem] flex-col items-stretch justify-between gap-1 rounded-xl border border-primary/30 bg-primary/8 p-1.5 shadow-sm">
+                  <span class="text-center text-xs font-semibold leading-none"><%= cell_date.day %></span>
+                  <label class="flex flex-1 cursor-pointer items-center justify-center rounded-lg border border-dashed border-base-300 bg-base-100/70 transition-colors hover:bg-base-100">
+                    <%= hidden_field_tag "availability[#{slot.id}]", "0" %>
+                    <%= check_box_tag "availability[#{slot.id}]", "1", guest.available_for?(slot), class: "checkbox checkbox-primary" %>
+                  </label>
+                </div>
+              <% else %>
+                <div class="flex aspect-square min-h-[3.5rem] items-center justify-center rounded-xl bg-base-200/45 text-xs text-base-content/35">
+                  <%= cell_date.day %>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,22 @@
+<% content_for :title, @event.title %>
+<div class="mx-auto max-w-4xl space-y-6">
+  <section class="hero-panel">
+    <div class="hero-body space-y-4">
+      <span class="hero-kicker"><%= t("views.guests.edit.eyebrow") %></span>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl"><%= @event.title %></h1>
+        <p class="max-w-3xl text-sm leading-6 text-base-content/70 sm:text-base"><%= t("views.guests.edit.lead") %></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="surface-card">
+    <div class="surface-card-body">
+      <%= render "shared/guest_availability_form",
+            event: @event,
+            guest: @guest,
+            form_url: edit_guest_path(@guest.update_token),
+            http_method: :patch %>
+    </div>
+  </section>
+</div>

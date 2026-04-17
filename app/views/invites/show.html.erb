@@ -1,0 +1,27 @@
+<% content_for :title, @event.title %>
+<div class="mx-auto max-w-4xl space-y-6">
+  <section class="hero-panel">
+    <div class="hero-body space-y-4">
+      <span class="hero-kicker"><%= t("views.invites.show.eyebrow") %></span>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl"><%= @event.title %></h1>
+        <% if @event.description.present? %>
+          <p class="max-w-3xl whitespace-pre-wrap text-base leading-7 text-base-content/75"><%= @event.description %></p>
+        <% end %>
+        <p class="max-w-3xl text-sm leading-6 text-base-content/70 sm:text-base">
+          <%= t("views.invites.show.lead") %>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="surface-card">
+    <div class="surface-card-body">
+      <%= render "shared/guest_availability_form",
+            event: @event,
+            guest: @guest,
+            form_url: invite_path(@event.invite_token),
+            http_method: :post %>
+    </div>
+  </section>
+</div>

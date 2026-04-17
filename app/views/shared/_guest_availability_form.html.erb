@@ -1,0 +1,49 @@
+<%# locals: (event:, guest:, form_url:, http_method:) %>
+<%= form_with model: guest, url: form_url, method: http_method, class: "space-y-8" do |f| %>
+  <% if guest.errors.any? %>
+    <div role="alert" class="alert alert-error">
+      <ul class="list-disc list-inside text-sm">
+        <% guest.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="soft-panel space-y-5">
+    <div class="space-y-1">
+      <h2 class="section-title !text-xl">Quem está respondendo?</h2>
+      <p class="section-copy">Seu nome aparece para o organizador somente nos horários em que você marcar disponibilidade.</p>
+    </div>
+
+    <div class="form-control w-full max-w-md">
+      <%= f.label :name, t("guest_availability.name_label"), class: "label px-0 font-medium" %>
+      <%= f.text_field :name, class: "input input-bordered h-12 w-full rounded-2xl", required: true, maxlength: Guest::MAX_NAME_LENGTH %>
+    </div>
+  </section>
+
+  <section class="space-y-3">
+    <div class="space-y-1">
+      <h2 class="section-title !text-xl"><%= t("guest_availability.section_title") %></h2>
+      <p class="section-copy">
+        <% if event.all_day? %>
+          <%= t("guest_availability.all_day_intro") %>
+        <% elsif event.duration_hours.present? %>
+          <%= t("guest_availability.timed_intro_with_duration", hours: event.duration_hours) %>
+        <% else %>
+          <%= t("guest_availability.timed_intro") %>
+        <% end %>
+      </p>
+    </div>
+  </section>
+
+  <% if event.all_day? %>
+    <%= render "shared/guest_all_day_calendars", event: event, guest: guest %>
+  <% else %>
+    <%= render "shared/guest_timed_week_calendars", event: event, guest: guest %>
+  <% end %>
+
+  <div class="flex justify-end">
+    <%= f.submit t("guest_availability.submit"), class: "btn btn-primary rounded-full px-7 shadow-lg shadow-primary/20" %>
+  </div>
+<% end %>

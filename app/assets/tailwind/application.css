@@ -1,0 +1,77 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer components {
+  .app-shell {
+    @apply min-h-screen bg-base-200 text-base-content;
+    background-image:
+      radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 12%, transparent), transparent 28rem),
+      radial-gradient(circle at top right, color-mix(in srgb, var(--color-secondary) 10%, transparent), transparent 26rem),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-base-100) 92%, transparent), var(--color-base-200));
+  }
+
+  .page-wrap {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .app-topbar {
+    @apply sticky top-0 z-40 border-b border-base-300/50 bg-base-100/85 backdrop-blur-xl;
+  }
+
+  .hero-panel {
+    @apply relative overflow-hidden rounded-[2rem] border border-base-300/60 bg-base-100 shadow-2xl shadow-base-content/5;
+  }
+
+  .hero-panel::after {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent;
+  }
+
+  .hero-body {
+    @apply p-6 sm:p-8 lg:p-10;
+  }
+
+  .hero-kicker {
+    @apply inline-flex items-center rounded-full border border-primary/15 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+  }
+
+  .surface-card {
+    @apply rounded-[1.5rem] border border-base-300/60 bg-base-100 shadow-xl shadow-base-content/5;
+  }
+
+  .surface-card-body {
+    @apply p-5 sm:p-7;
+  }
+
+  .soft-panel {
+    @apply rounded-2xl border border-base-300/60 bg-base-200/45 p-4;
+  }
+
+  .section-title {
+    @apply text-xl font-semibold tracking-tight sm:text-2xl;
+  }
+
+  .section-copy {
+    @apply text-sm leading-6 text-base-content/70 sm:text-base;
+  }
+
+  .stat-pill {
+    @apply inline-flex items-center rounded-full border border-base-300/70 bg-base-100/80 px-3 py-1 text-xs font-medium text-base-content/70 shadow-sm;
+  }
+
+  .calendar-card {
+    @apply rounded-[1.25rem] border border-base-300/60 bg-base-100 shadow-lg shadow-base-content/5;
+  }
+
+  .calendar-card-body {
+    @apply p-4 sm:p-5;
+  }
+
+  .link-panel {
+    @apply rounded-2xl border border-base-300/70 bg-base-100/70 p-4 sm:p-5;
+  }
+
+  .subtle-divider {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-base-300 to-transparent;
+  }
+}

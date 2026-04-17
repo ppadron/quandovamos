@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <title><%= content_for(:title) || t("layout.default_title") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="app-shell">
+    <header class="app-topbar">
+      <div class="page-wrap navbar min-h-20 px-0">
+        <div class="navbar-start">
+          <%= link_to root_path, class: "group inline-flex items-center gap-3 rounded-full px-1 py-1 transition-colors hover:bg-base-200/70" do %>
+            <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-lg font-black text-primary-content shadow-md shadow-primary/20">Q</span>
+            <span>
+              <span class="block text-lg font-semibold tracking-tight"><%= t("app.name") %></span>
+              <span class="block text-xs text-base-content/55">Agendamento em Grupo</span>
+            </span>
+          <% end %>
+        </div>
+        <div class="navbar-end">
+          <%= link_to t("layout.new_event"), new_event_path, class: "btn btn-primary rounded-full px-5 shadow-lg shadow-primary/20" %>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrap py-8 sm:py-10 lg:py-12">
+      <% flash.each do |type, message| %>
+        <% next if message.blank? %>
+        <% alert_class = case type.to_s
+          when "notice" then "alert-success"
+          when "alert" then "alert-error"
+          else "alert-info"
+        end %>
+        <div role="alert" class="alert <%= alert_class %> mb-6 rounded-2xl border border-base-300/60 shadow-lg shadow-base-content/5">
+          <span><%= message %></span>
+        </div>
+      <% end %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

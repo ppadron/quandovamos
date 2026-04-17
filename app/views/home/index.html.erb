@@ -1,0 +1,37 @@
+<% content_for :title, t("home.index.title") %>
+
+<div class="space-y-8 lg:space-y-10">
+  <section class="hero-panel">
+    <div class="hero-body grid gap-8 lg:grid-cols-[1.35fr_0.9fr] lg:items-center">
+      <div class="space-y-6">
+        <span class="hero-kicker"><%= t("home.index.eyebrow") %></span>
+        <div class="space-y-4">
+          <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"><%= t("home.index.title") %></h1>
+          <p class="max-w-2xl text-base leading-7 text-base-content/75 sm:text-lg">
+            <%= t("home.index.lead") %>
+          </p>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <%= link_to t("home.index.cta"), new_event_path, class: "btn btn-primary btn-lg rounded-full px-7 shadow-lg shadow-primary/20" %>
+        </div>
+      </div>
+
+      <div class="soft-panel space-y-4">
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-base-300/70 bg-base-100 p-4 shadow-sm">
+            <p class="text-sm font-medium text-base-content/65">1. Crie o Evento</p>
+            <p class="mt-1 text-base font-semibold">Escolha dias inteiros ou horários com duração fixa.</p>
+          </div>
+          <div class="rounded-2xl border border-base-300/70 bg-base-100 p-4 shadow-sm">
+            <p class="text-sm font-medium text-base-content/65">2. Compartilhe o link</p>
+            <p class="mt-1 text-base font-semibold">Cada convidado responde em poucos cliques, no celular ou no computador.</p>
+          </div>
+          <div class="rounded-2xl border border-base-300/70 bg-base-100 p-4 shadow-sm">
+            <p class="text-sm font-medium text-base-content/65">3. Decida rápido</p>
+            <p class="mt-1 text-base font-semibold">O painel do organizador mostra quem pode em cada opção e destaca consenso.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

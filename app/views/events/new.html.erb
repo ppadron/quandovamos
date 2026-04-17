@@ -1,0 +1,20 @@
+<% content_for :title, t("events.new.title") %>
+<div class="mx-auto max-w-4xl space-y-6">
+  <section class="hero-panel">
+    <div class="hero-body space-y-4">
+      <span class="hero-kicker"><%= t("layout.new_event") %></span>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl"><%= t("events.new.title") %></h1>
+        <p class="max-w-3xl text-base leading-7 text-base-content/75">
+          <%= t("events.new.lead") %>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="surface-card">
+    <div class="surface-card-body">
+      <%= render "form", event: @event %>
+    </div>
+  </section>
+</div>

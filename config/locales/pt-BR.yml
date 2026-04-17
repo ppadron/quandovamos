@@ -1,0 +1,119 @@
+---
+pt-BR:
+  app:
+    name: "Quando Vamos?"
+  layout:
+    default_title: "Quando Vamos?"
+    new_event: "Novo evento"
+  common:
+    "yes": "Sim"
+    "no": "Não"
+    copied: "Copiado!"
+    copy: "Copiar"
+  flashes:
+    event_created: "Evento criado. Guarde esta página — o link do organizador é a única forma de ver as respostas."
+    invite_saved: "Salvo. Guarde esta página se precisar alterar sua disponibilidade depois."
+    guest_updated: "Disponibilidade atualizada."
+    invite_save_error: "Não foi possível salvar sua resposta."
+    guest_save_error: "Não foi possível salvar as alterações."
+  errors:
+    event:
+      must_have_slots: "Adicione pelo menos uma data ou horário."
+      too_many_slots: "Não é permitido mais de %{max} opções de horário."
+      duration_required: "Escolha a duração (1 a 23 horas) para eventos com horário."
+      past_slots_not_allowed: "Não é permitido escolher datas ou horários no passado."
+  home:
+    index:
+      eyebrow: "Planejamento simples"
+      title: "Agende em conjunto"
+      lead: "Crie um evento, proponha datas ou horários e compartilhe um link para que as pessoas marquem quando podem — sem cadastro."
+      cta: "Criar evento"
+      secondary_cta: "Ver como funciona"
+      feature_one_title: "Links prontos para compartilhar"
+      feature_one_text: "Crie a enquete e envie o convite em segundos, sem contas ou cadastro."
+      feature_two_title: "Grade pensada para o Brasil"
+      feature_two_text: "Datas e horários aparecem em Brasília, enquanto o sistema continua salvando tudo em UTC."
+      feature_three_title: "Decisão rápida"
+      feature_three_text: "Veja de imediato os horários em que todos podem e acompanhe as respostas no calendário."
+  events:
+    new:
+      title: "Novo evento"
+      lead: "Defina o tipo da enquete, a duração do evento e as opções de datas ou horários para compartilhar com seus convidados."
+    form:
+      title_label: "Título"
+      description_label: "Descrição"
+      duration_mode_legend: "Duração do Evento"
+      mode_all_day: "Dia inteiro"
+      mode_timed: "Com horário"
+      duration_hours_label: "Duração em horas do evento"
+      duration_hours_help: "Na grade, escolha apenas o horário de início."
+      duration_hours_unit:
+        one: "1 hora"
+        other: "%{count} horas"
+      selection_template: "%{count} de %{max} selecionados"
+      schedule_footnote: "Horários mostrados no fuso de Brasília."
+      month_heading: "Escolha as opções de datas"
+      week_heading: "Escolha as opções de horários de início"
+      week_timed_intro: "Cada célula é o início de um bloco com a duração escolhida acima."
+      prev_month: "Mês anterior"
+      next_month: "Próximo mês"
+      prev_week: "Semana anterior"
+      next_week: "Próxima semana"
+      submit: "Criar evento"
+  views:
+    invites:
+      show:
+        eyebrow: "Convite"
+        lead: "Marque quando você pode. Se precisar mudar depois, use o link pessoal que aparece ao salvar."
+    guests:
+      edit:
+        eyebrow: "Editar resposta"
+        lead: "Atualize seu nome ou sua disponibilidade para este evento."
+  guest_availability:
+    section_title: "Sua disponibilidade"
+    name_label: "Seu nome"
+    submit: "Salvar disponibilidade"
+    all_day_intro: "Marque cada dia proposto em que você pode. Os dias que não fazem parte deste evento aparecem acinzentados."
+    timed_intro: "Use a grade semanal: marque os horários em que você pode (horário de Brasília)."
+    timed_intro_with_duration: "Cada coluna é um horário de início de %{hours} h — marque só se você pode durante todo esse período (horário de Brasília)."
+  organizer:
+    poll_types:
+      all_day: "Evento dia inteiro"
+      timed: "Evento com horário"
+      timed_with_duration: "Evento com horário — %{hours} horas por opção (início na grade)"
+    options_count:
+      zero: "%{count} opções"
+      one: "%{count} opção"
+      other: "%{count} opções"
+    guests_count:
+      zero: "nenhum convidado"
+      one: "%{count} convidado"
+      other: "%{count} convidados"
+    invite_card:
+      title: "Link do convite"
+      help: "Compartilhe com quem você quer que responda. Não revela o painel do organizador."
+    organizer_card:
+      title: "Link do organizador"
+      help: "Mantenha em sigilo. Quem tiver este link vê as respostas e os links pessoais de cada convidado."
+    unanimous:
+      title: "Todos disponíveis"
+      empty_guests: "Ainda não há respostas. Compartilhe o link do convite para receber disponibilidades."
+      none_yet: "Ainda não há um horário em que todos marcaram disponível."
+    grid:
+      title: "Grade de disponibilidade"
+      guest_column: "Convidado(a)"
+    availability_calendar:
+      title: "Disponibilidade no calendário"
+      legend_unanimous: "Marca verde: todos os convidados disponíveis."
+      no_responses: "Ninguém marcou disponível neste horário."
+    guest_list:
+      title: "Lista de convidados"
+      empty: "Ninguém respondeu ainda."
+      help: "Envie o link pessoal de alguém se ela precisar alterar a resposta depois."
+      name: "Nome"
+      updated_at: "Atualizado em"
+      personal_link: "Link pessoal para editar"
+  calendar:
+    weekdays_abbr: [ "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom" ]
+    week_range_title: "Semana de %{start} a %{end}"
+    hour_column: "Hora"

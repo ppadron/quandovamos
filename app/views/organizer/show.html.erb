@@ -1,0 +1,135 @@
+<% content_for :title, @event.title %>
+<div class="space-y-8 lg:space-y-10">
+  <section class="hero-panel">
+    <div class="hero-body space-y-5">
+      <div class="space-y-3">
+        <span class="hero-kicker">Painel do organizador</span>
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl"><%= @event.title %></h1>
+        <% if @event.description.present? %>
+          <p class="max-w-4xl whitespace-pre-wrap text-base leading-7 text-base-content/75"><%= @event.description %></p>
+        <% end %>
+      </div>
+      <div class="flex flex-wrap gap-2 text-sm text-base-content/70">
+        <span class="stat-pill">
+          <% if @event.all_day? %>
+            <%= t("organizer.poll_types.all_day") %>
+          <% elsif @event.duration_hours.present? %>
+            <%= t("organizer.poll_types.timed_with_duration", hours: @event.duration_hours) %>
+          <% else %>
+            <%= t("organizer.poll_types.timed") %>
+          <% end %>
+        </span>
+        <span class="stat-pill"><%= t("organizer.options_count", count: @event.event_slots.count) %></span>
+        <span class="stat-pill"><%= t("organizer.guests_count", count: @guests.size) %></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <div class="surface-card">
+      <div class="surface-card-body space-y-4">
+        <h2 class="card-title text-lg"><%= t("organizer.invite_card.title") %></h2>
+        <p class="section-copy"><%= t("organizer.invite_card.help") %></p>
+        <div class="link-panel flex flex-col gap-3 sm:flex-row sm:items-center" data-controller="clipboard" data-clipboard-copied-label-value="<%= t("common.copied") %>">
+          <input class="input input-bordered h-12 w-full rounded-2xl font-mono text-xs sm:flex-1" data-clipboard-target="source" readonly value="<%= invite_url(@event.invite_token) %>">
+          <button type="button" class="btn btn-outline rounded-full px-5 shrink-0" data-action="clipboard#copy"><%= t("common.copy") %></button>
+          <span class="min-w-[4rem] text-sm text-base-content/60" data-clipboard-target="status"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="surface-card">
+      <div class="surface-card-body space-y-4">
+        <h2 class="card-title text-lg"><%= t("organizer.organizer_card.title") %></h2>
+        <p class="section-copy"><%= t("organizer.organizer_card.help") %></p>
+        <div class="link-panel flex flex-col gap-3 sm:flex-row sm:items-center" data-controller="clipboard" data-clipboard-copied-label-value="<%= t("common.copied") %>">
+          <input class="input input-bordered h-12 w-full rounded-2xl font-mono text-xs sm:flex-1" data-clipboard-target="source" readonly value="<%= organizer_event_url(@event.invite_token, @event.organizer_token) %>">
+          <button type="button" class="btn btn-outline rounded-full px-5 shrink-0" data-action="clipboard#copy"><%= t("common.copy") %></button>
+          <span class="min-w-[4rem] text-sm text-base-content/60" data-clipboard-target="status"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card">
+    <div class="surface-card-body space-y-4">
+      <h2 class="card-title text-lg"><%= t("organizer.unanimous.title") %></h2>
+      <% if @guests.empty? %>
+        <div class="soft-panel">
+          <p class="section-copy"><%= t("organizer.unanimous.empty_guests") %></p>
+        </div>
+      <% elsif @unanimous_slots.any? %>
+        <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <% @unanimous_slots.each do |slot| %>
+            <li class="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm font-medium text-success-content/90">
+              <span class="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-success text-success-content">✓</span>
+              <%= slot_label(@event, slot) %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="soft-panel">
+          <p class="section-copy"><%= t("organizer.unanimous.none_yet") %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="surface-card">
+    <div class="surface-card-body space-y-5">
+      <div>
+        <h2 class="card-title text-lg"><%= t("organizer.availability_calendar.title") %></h2>
+        <p class="mt-1 section-copy"><%= t("organizer.availability_calendar.legend_unanimous") %></p>
+      </div>
+      <% if @event.event_slots.empty? %>
+        <div class="soft-panel">
+          <p class="section-copy"><%= t("organizer.unanimous.none_yet") %></p>
+        </div>
+      <% else %>
+        <%= render "organizer/availability_calendar",
+              event: @event,
+              availability_names_by_slot_id: @availability_names_by_slot_id,
+              unanimous_slot_id_set: @unanimous_slot_id_set %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="surface-card">
+    <div class="surface-card-body space-y-4">
+      <h2 class="card-title text-lg"><%= t("organizer.guest_list.title") %></h2>
+      <% if @guests.empty? %>
+        <div class="soft-panel">
+          <p class="section-copy"><%= t("organizer.guest_list.empty") %></p>
+        </div>
+      <% else %>
+        <p class="section-copy"><%= t("organizer.guest_list.help") %></p>
+        <div class="overflow-x-auto rounded-2xl border border-base-300/70 bg-base-100">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th><%= t("organizer.guest_list.name") %></th>
+                <th><%= t("organizer.guest_list.updated_at") %></th>
+                <th><%= t("organizer.guest_list.personal_link") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @guests.each do |guest| %>
+                <tr>
+                  <td class="font-medium"><%= guest.name %></td>
+                  <td class="text-sm text-base-content/70"><%= format_br_datetime(guest.updated_at) %></td>
+                  <td>
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center" data-controller="clipboard" data-clipboard-copied-label-value="<%= t("common.copied") %>">
+                      <input class="input input-bordered h-11 w-full rounded-2xl font-mono text-xs" data-clipboard-target="source" readonly value="<%= edit_guest_url(guest.update_token) %>">
+                      <button type="button" class="btn btn-ghost btn-sm rounded-full shrink-0" data-action="clipboard#copy"><%= t("common.copy") %></button>
+                      <span class="text-xs text-base-content/60" data-clipboard-target="status"></span>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

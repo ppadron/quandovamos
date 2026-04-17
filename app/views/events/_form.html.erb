@@ -1,0 +1,109 @@
+<%= form_with model: event, class: "space-y-8" do |f| %>
+  <% if event.errors.any? %>
+    <div role="alert" class="alert alert-error">
+      <ul class="list-disc list-inside text-sm">
+        <% event.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="soft-panel space-y-5">
+    <div class="space-y-1">
+      <h2 class="section-title !text-xl">Informações do evento</h2>
+      <p class="section-copy">Dê um nome claro e, se quiser, inclua contexto para os convidados.</p>
+    </div>
+
+    <div class="grid gap-5">
+      <div class="form-control w-full">
+        <%= f.label :title, t("events.form.title_label"), class: "label font-medium" %>
+        <%= f.text_field :title, class: "input input-bordered w-full h-12 rounded-2xl", required: true, maxlength: 200 %>
+      </div>
+
+      <div class="form-control w-full">
+        <%= f.label :description, t("events.form.description_label"), class: "label font-medium" %>
+        <%= f.text_area :description, class: "textarea textarea-bordered w-full h-28 rounded-2xl" %>
+      </div>
+    </div>
+  </section>
+
+  <div
+    class="space-y-6 rounded-[1.5rem] border border-base-300/60 bg-base-100 p-5 shadow-lg shadow-base-content/5 sm:p-6"
+    data-controller="schedule-picker"
+    data-schedule-picker-max-slots-value="<%= Event::MAX_SLOTS %>"
+    data-schedule-picker-initial-selected-value="<%= h((@initial_proposed || []).to_json) %>"
+    data-schedule-picker-selection-template-value="<%= h(t("events.form.selection_template")) %>"
+    data-schedule-picker-hour-column-label-value="<%= h(t("calendar.hour_column")) %>"
+    data-schedule-picker-start-hour-value="0"
+    data-schedule-picker-end-hour-value="23">
+    <div class="space-y-1">
+      <h2 class="section-title !text-xl">Opções do Evento</h2>
+      <p class="section-copy">Escolha se o evento é o dia inteiro ou se usa horários com a mesma duração para todas as opções.</p>
+    </div>
+
+    <fieldset class="form-control flex flex-col gap-5">
+      <legend class="label px-0 py-0"><span class="label-text text-sm font-semibold uppercase tracking-wide text-base-content/70"><%= t("events.form.duration_mode_legend") %></span></legend>
+      <label class="label cursor-pointer justify-start gap-3 rounded-[1.25rem] border border-base-300/70 bg-base-200/25 px-4 py-4 transition-colors hover:border-primary/30 hover:bg-primary/5">
+        <%= f.radio_button :all_day, true,
+              class: "radio radio-primary",
+              data: { action: "change->schedule-picker#modeChanged" } %>
+        <span class="label-text text-base font-medium"><%= t("events.form.mode_all_day") %></span>
+      </label>
+      <label class="label cursor-pointer justify-start gap-3 rounded-[1.25rem] border border-base-300/70 bg-base-200/25 px-4 py-4 transition-colors hover:border-primary/30 hover:bg-primary/5">
+        <%= f.radio_button :all_day, false,
+              class: "radio radio-primary",
+              data: { action: "change->schedule-picker#modeChanged" } %>
+        <span class="label-text text-base font-medium"><%= t("events.form.mode_timed") %></span>
+      </label>
+    </fieldset>
+
+    <div data-schedule-picker-target="timedDurationSection" class="form-control w-full max-w-xs <%= "hidden" if event.all_day? %>">
+      <%= f.label :duration_hours, t("events.form.duration_hours_label"), class: "label px-0 font-medium" %>
+      <%= f.select :duration_hours,
+            (1..23).map { |h| [ t("events.form.duration_hours_unit", count: h), h ] },
+            {},
+            class: "select select-bordered w-full rounded-2xl",
+            data: { action: "change->schedule-picker#durationChanged" } %>
+      <p class="mt-2 text-sm text-base-content/70"><%= t("events.form.duration_hours_help") %></p>
+    </div>
+
+    <div data-schedule-picker-target="hiddenInputs" class="hidden" aria-hidden="true"></div>
+
+    <div data-schedule-picker-target="allDaySection" class="space-y-4 <%= "hidden" unless event.all_day? %>">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-lg font-semibold tracking-tight"><%= t("events.form.month_heading") %></h2>
+        <div class="join">
+          <button type="button" class="btn btn-sm join-item rounded-l-full" title="<%= t("events.form.prev_month") %>" data-action="click->schedule-picker#prevMonth">‹</button>
+          <button type="button" class="btn btn-sm join-item rounded-r-full" title="<%= t("events.form.next_month") %>" data-action="click->schedule-picker#nextMonth">›</button>
+        </div>
+      </div>
+      <div class="rounded-[1.25rem] border border-base-300/60 bg-base-200/30 p-4">
+        <p data-schedule-picker-target="monthTitle" class="text-sm font-medium text-center uppercase tracking-wide text-base-content/65"></p>
+        <div class="mt-3" data-schedule-picker-target="monthGrid"></div>
+      </div>
+    </div>
+
+    <div data-schedule-picker-target="timedSection" class="space-y-4 <%= "hidden" if event.all_day? %>">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-lg font-semibold tracking-tight"><%= t("events.form.week_heading") %></h2>
+        <div class="join">
+          <button type="button" class="btn btn-sm join-item rounded-l-full" title="<%= t("events.form.prev_week") %>" data-action="click->schedule-picker#prevWeek">‹</button>
+          <button type="button" class="btn btn-sm join-item rounded-r-full" title="<%= t("events.form.next_week") %>" data-action="click->schedule-picker#nextWeek">›</button>
+        </div>
+      </div>
+      <p data-schedule-picker-target="weekTitle" class="text-sm font-medium text-center font-mono uppercase tracking-wide text-base-content/65"></p>
+      <p class="text-sm text-base-content/70"><%= t("events.form.week_timed_intro") %></p>
+      <div class="rounded-[1.25rem] border border-base-300/60 bg-base-200/30 p-3 sm:p-4" data-schedule-picker-target="weekGrid"></div>
+    </div>
+
+    <p class="rounded-2xl bg-base-200/40 px-4 py-3 text-sm text-base-content/60">
+      <span data-schedule-picker-target="selectionCount">0</span>
+      · <%= t("events.form.schedule_footnote") %>
+    </p>
+  </div>
+
+  <div class="card-actions justify-end">
+    <%= f.submit t("events.form.submit"), class: "btn btn-primary rounded-full px-7 shadow-lg shadow-primary/20" %>
+  </div>
+<% end %>
