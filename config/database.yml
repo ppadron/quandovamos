@@ -4,6 +4,8 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem "sqlite3"
 #
+<% production_sqlite_url = ->(name) { "sqlite3:#{Rails.root.join("storage", name)}" } %>
+
 default: &default
   adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -26,16 +28,21 @@ test:
 production:
   primary:
     <<: *default
+    # Explicit URL prevents Rails from trying to merge an injected DATABASE_URL.
+    url: <%= production_sqlite_url.call("production.sqlite3") %>
     database: storage/production.sqlite3
   cache:
     <<: *default
+    url: <%= production_sqlite_url.call("production_cache.sqlite3") %>
     database: storage/production_cache.sqlite3
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
+    url: <%= production_sqlite_url.call("production_queue.sqlite3") %>
     database: storage/production_queue.sqlite3
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
+    url: <%= production_sqlite_url.call("production_cable.sqlite3") %>
     database: storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate
