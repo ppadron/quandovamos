@@ -14,7 +14,7 @@ class InvitesController < ApplicationController
       @event.event_slots.each do |slot|
         @guest.guest_availabilities.create!(
           event_slot: slot,
-          available: truthy?(availability[slot.id.to_s])
+          available: timed_slot_locked?(slot) ? false : truthy?(availability[slot.id.to_s])
         )
       end
     end
@@ -47,5 +47,9 @@ class InvitesController < ApplicationController
 
   def truthy?(value)
     ActiveModel::Type::Boolean.new.cast(value)
+  end
+
+  def timed_slot_locked?(slot)
+    !@event.all_day? && slot.starts_at < Time.current
   end
 end

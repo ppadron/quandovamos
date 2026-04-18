@@ -15,7 +15,7 @@
   }
 
   .app-topbar {
-    @apply sticky top-0 z-40 border-b border-base-300/50 bg-base-100/85 backdrop-blur-xl;
+    @apply border-b border-base-300/50 bg-base-100/85;
   }
 
   .hero-panel {
@@ -65,6 +65,88 @@
 
   .calendar-card-body {
     @apply p-4 sm:p-5;
+  }
+
+  .calendar-scroll {
+    @apply rounded-2xl border border-base-300/70 bg-base-100;
+  }
+
+  .calendar-sticky-head {
+    @apply sticky top-0 z-[80] bg-base-200 shadow-sm;
+  }
+
+  .calendar-sticky-corner {
+    @apply z-[90];
+  }
+
+  .timed-slot-block {
+    @apply pointer-events-auto cursor-pointer transition-[filter] duration-150 ease-out;
+  }
+
+  .timed-slot-block:hover,
+  .timed-slot-block:focus-visible {
+    filter: brightness(1.08);
+  }
+
+  .timed-slot-block-row-highlight {
+    @apply pointer-events-none absolute inset-x-0 z-0 opacity-0 transition-opacity duration-150 ease-out;
+    background-color: color-mix(in srgb, var(--color-primary) 16%, transparent);
+  }
+
+  .timed-slot-block-row-highlight-active {
+    @apply opacity-100;
+  }
+
+  .timed-slot-block-label {
+    @apply relative z-10 mt-1 ml-1 inline-block max-w-[calc(100%-0.5rem)] truncate rounded-md bg-base-100 px-2 py-1 text-[10px] font-semibold leading-tight text-left shadow-sm ring-1 ring-base-300/70;
+  }
+
+  .timed-slot-add-overlay {
+    @apply pointer-events-none absolute inset-0 flex items-center justify-center invisible opacity-0 transition-opacity duration-150 ease-out;
+  }
+
+  .timed-slot-add-overlay-active {
+    @apply pointer-events-auto visible cursor-pointer opacity-100;
+  }
+
+  .timed-slot-add-overlay.timed-slot-row-highlight {
+    background-color: color-mix(in srgb, var(--color-primary) 16%, transparent) !important;
+  }
+
+  .timed-slot-add-overlay.timed-slot-row-highlight:hover,
+  .timed-slot-add-overlay.timed-slot-row-highlight:focus-visible {
+    background-color: color-mix(in srgb, var(--color-primary) 24%, transparent) !important;
+  }
+
+  .timed-slot-add-overlay-visible {
+    @apply pointer-events-auto visible cursor-pointer opacity-100;
+  }
+
+  .timed-slot-add-overlay-label {
+    @apply pointer-events-none relative z-10 flex h-[1.6rem] w-[1.6rem] items-center justify-center rounded-full border border-primary/25 bg-base-100 text-base font-semibold leading-none text-primary shadow-sm;
+    background-color: white !important;
+  }
+
+  .timed-slot-blocked-overlay {
+    @apply pointer-events-auto absolute inset-0 flex items-center justify-center rounded-none border-b border-base-300/60 bg-red-500/0 opacity-0 transition-all duration-150 ease-out;
+  }
+
+  .timed-slot-blocked-overlay.timed-slot-row-highlight {
+    background-color: color-mix(in srgb, var(--color-red-500) 16%, transparent) !important;
+    opacity: 1;
+  }
+
+  .timed-slot-blocked-overlay-label {
+    @apply text-base font-semibold leading-none text-red-700 opacity-0 transition-opacity duration-150 ease-out;
+  }
+
+  .timed-slot-blocked-overlay:hover .timed-slot-blocked-overlay-label,
+  .timed-slot-blocked-overlay:focus-visible .timed-slot-blocked-overlay-label {
+    @apply opacity-100;
+  }
+
+  .timed-slot-row-highlight {
+    background-color: color-mix(in srgb, var(--color-primary) 16%, transparent) !important;
   }
 
   .link-panel {

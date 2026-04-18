@@ -50,6 +50,10 @@ module CalendarHelper
     (hours.min..hours.max).to_a
   end
 
+  def timed_slot_in_past?(slot)
+    slot.starts_at < Time.current
+  end
+
   def calendar_weekday_abbrs
     I18n.t("calendar.weekdays_abbr")
   end

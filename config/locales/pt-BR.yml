@@ -20,7 +20,8 @@ pt-BR:
     event:
       must_have_slots: "Adicione pelo menos uma data ou horário."
       too_many_slots: "Não é permitido mais de %{max} opções de horário."
-      duration_required: "Escolha a duração (1 a 23 horas) para eventos com horário."
+      duration_required: "Escolha a duração (1 a 8 horas) para eventos com horário."
+      duration_range: "deve estar entre 1 e 8 horas. Para mais tempo, use Dia inteiro."
       past_slots_not_allowed: "Não é permitido escolher datas ou horários no passado."
   home:
     index:
@@ -46,7 +47,7 @@ pt-BR:
       mode_all_day: "Dia inteiro"
       mode_timed: "Com horário"
       duration_hours_label: "Duração em horas do evento"
-      duration_hours_help: "Na grade, escolha apenas o horário de início."
+      duration_hours_help: "Escolha de 1 a 8 horas. Para mais tempo, use Dia inteiro. Na grade, escolha apenas o horário de início."
       duration_hours_unit:
         one: "1 hora"
         other: "%{count} horas"
@@ -54,7 +55,7 @@ pt-BR:
       schedule_footnote: "Horários mostrados no fuso de Brasília."
       month_heading: "Escolha as opções de datas"
       week_heading: "Escolha as opções de horários de início"
-      week_timed_intro: "Cada célula é o início de um bloco com a duração escolhida acima."
+      week_timed_intro: "Cada célula é um horário de início. As opções escolhidas aparecem como blocos contínuos no estilo de agenda, inclusive quando se sobrepõem."
       prev_month: "Mês anterior"
       next_month: "Próximo mês"
       prev_week: "Semana anterior"

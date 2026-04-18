@@ -6,6 +6,12 @@ if [ -z "${LD_PRELOAD+x}" ]; then
     export LD_PRELOAD
 fi
 
+# This deployment intentionally uses SQLite in production, so ignore any
+# platform-injected DATABASE_URL that would override config/database.yml.
+if [ "${RAILS_ENV:-development}" = "production" ]; then
+  unset DATABASE_URL
+fi
+
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   ./bin/rails db:prepare

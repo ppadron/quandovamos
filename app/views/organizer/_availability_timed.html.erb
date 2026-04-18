@@ -9,14 +9,71 @@
                 start: monday.strftime("%d/%m/%Y"),
                 end: sunday.strftime("%d/%m/%Y")) %>
         </h3>
-        <div class="overflow-x-auto rounded-2xl border border-base-300/70 bg-base-100">
+        <div class="space-y-4 md:hidden">
+          <% (0..6).each_slice(1) do |day_indexes| %>
+            <div class="calendar-scroll">
+              <table class="table table-xs sm:table-sm table-bordered w-full">
+                <thead>
+                  <tr>
+                    <th class="calendar-sticky-head calendar-sticky-corner w-14"><%= t("calendar.hour_column") %></th>
+                    <% day_indexes.each do |d| %>
+                      <% day_date = monday + d %>
+                      <th class="calendar-sticky-head text-center">
+                        <div class="font-semibold"><%= calendar_weekday_abbrs[d] %></div>
+                        <div class="text-xs font-normal opacity-80"><%= day_date.strftime("%d/%m") %></div>
+                      </th>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% timed_grid_hours_for_week_slots(week_slots).each do |hour| %>
+                    <tr>
+                      <td class="bg-base-200 font-mono text-xs whitespace-nowrap"><%= sprintf("%02d:00", hour) %></td>
+                      <% day_indexes.each do |d| %>
+                        <% day_date = monday + d %>
+                        <% cell_time = Time.zone.local(day_date.year, day_date.month, day_date.day, hour, 0, 0) %>
+                        <% slot = week_slots.find { |s| s.starts_at.to_i == cell_time.to_i } %>
+                        <% if slot %>
+                          <% names = availability_names_by_slot_id[slot.id] || [] %>
+                          <% unanimous = unanimous_slot_id_set.include?(slot.id) %>
+                          <% past_slot = timed_slot_in_past?(slot) %>
+                          <td class="align-top p-1">
+                            <div class="<%= past_slot ? "relative min-h-[5rem] rounded-2xl border border-base-300/70 bg-base-200/55 p-2 opacity-60 shadow-sm" : "relative min-h-[5rem] rounded-2xl border border-primary/25 bg-primary/8 p-2 shadow-sm" %>">
+                              <% if unanimous %>
+                                <span class="absolute right-0.5 top-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-success text-xs font-bold leading-none text-success-content shadow-sm" title="<%= t("organizer.unanimous.title") %>">✓</span>
+                              <% end %>
+                              <div class="pr-7 text-left">
+                                <% if names.any? %>
+                                  <ul class="max-h-28 space-y-0.5 overflow-y-auto text-[10px] leading-tight text-base-content/90">
+                                    <% names.each do |name| %>
+                                      <li class="break-words" title="<%= name %>"><%= name %></li>
+                                    <% end %>
+                                  </ul>
+                                <% else %>
+                                  <p class="text-[10px] text-base-content/45"><%= t("organizer.availability_calendar.no_responses") %></p>
+                                <% end %>
+                              </div>
+                            </div>
+                          </td>
+                        <% else %>
+                          <td class="bg-base-200/40 p-0"></td>
+                        <% end %>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% end %>
+        </div>
+        <div class="hidden calendar-scroll lg:block">
           <table class="table table-xs sm:table-sm table-bordered w-full min-w-[640px]">
             <thead>
               <tr>
-                <th class="w-14 bg-base-200"><%= t("calendar.hour_column") %></th>
+                <th class="calendar-sticky-head calendar-sticky-corner w-14"><%= t("calendar.hour_column") %></th>
                 <% 7.times do |d| %>
                   <% day_date = monday + d %>
-                  <th class="text-center bg-base-200">
+                  <th class="calendar-sticky-head text-center">
                     <div class="font-semibold"><%= calendar_weekday_abbrs[d] %></div>
                     <div class="text-xs font-normal opacity-80"><%= day_date.strftime("%d/%m") %></div>
                   </th>
@@ -34,8 +91,9 @@
                     <% if slot %>
                       <% names = availability_names_by_slot_id[slot.id] || [] %>
                       <% unanimous = unanimous_slot_id_set.include?(slot.id) %>
+                      <% past_slot = timed_slot_in_past?(slot) %>
                       <td class="align-top p-1">
-                        <div class="relative min-h-[5rem] rounded-2xl border border-primary/25 bg-primary/8 p-2 shadow-sm">
+                        <div class="<%= past_slot ? "relative min-h-[5rem] rounded-2xl border border-base-300/70 bg-base-200/55 p-2 opacity-60 shadow-sm" : "relative min-h-[5rem] rounded-2xl border border-primary/25 bg-primary/8 p-2 shadow-sm" %>">
                           <% if unanimous %>
                             <span class="absolute right-0.5 top-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-success text-xs font-bold leading-none text-success-content shadow-sm" title="<%= t("organizer.unanimous.title") %>">✓</span>
                           <% end %>
@@ -60,6 +118,63 @@
               <% end %>
             </tbody>
           </table>
+        </div>
+        <div class="hidden space-y-4 md:block lg:hidden">
+          <% (0..6).each_slice(3) do |day_indexes| %>
+            <div class="calendar-scroll">
+              <table class="table table-xs sm:table-sm table-bordered w-full">
+                <thead>
+                  <tr>
+                    <th class="calendar-sticky-head calendar-sticky-corner w-14"><%= t("calendar.hour_column") %></th>
+                    <% day_indexes.each do |d| %>
+                      <% day_date = monday + d %>
+                      <th class="calendar-sticky-head text-center">
+                        <div class="font-semibold"><%= calendar_weekday_abbrs[d] %></div>
+                        <div class="text-xs font-normal opacity-80"><%= day_date.strftime("%d/%m") %></div>
+                      </th>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% timed_grid_hours_for_week_slots(week_slots).each do |hour| %>
+                    <tr>
+                      <td class="bg-base-200 font-mono text-xs whitespace-nowrap"><%= sprintf("%02d:00", hour) %></td>
+                      <% day_indexes.each do |d| %>
+                        <% day_date = monday + d %>
+                        <% cell_time = Time.zone.local(day_date.year, day_date.month, day_date.day, hour, 0, 0) %>
+                        <% slot = week_slots.find { |s| s.starts_at.to_i == cell_time.to_i } %>
+                        <% if slot %>
+                          <% names = availability_names_by_slot_id[slot.id] || [] %>
+                          <% unanimous = unanimous_slot_id_set.include?(slot.id) %>
+                          <% past_slot = timed_slot_in_past?(slot) %>
+                          <td class="align-top p-1">
+                            <div class="<%= past_slot ? "relative min-h-[5rem] rounded-2xl border border-base-300/70 bg-base-200/55 p-2 opacity-60 shadow-sm" : "relative min-h-[5rem] rounded-2xl border border-primary/25 bg-primary/8 p-2 shadow-sm" %>">
+                              <% if unanimous %>
+                                <span class="absolute right-0.5 top-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-success text-xs font-bold leading-none text-success-content shadow-sm" title="<%= t("organizer.unanimous.title") %>">✓</span>
+                              <% end %>
+                              <div class="pr-7 text-left">
+                                <% if names.any? %>
+                                  <ul class="max-h-28 space-y-0.5 overflow-y-auto text-[10px] leading-tight text-base-content/90">
+                                    <% names.each do |name| %>
+                                      <li class="break-words" title="<%= name %>"><%= name %></li>
+                                    <% end %>
+                                  </ul>
+                                <% else %>
+                                  <p class="text-[10px] text-base-content/45"><%= t("organizer.availability_calendar.no_responses") %></p>
+                                <% end %>
+                              </div>
+                            </div>
+                          </td>
+                        <% else %>
+                          <td class="bg-base-200/40 p-0"></td>
+                        <% end %>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

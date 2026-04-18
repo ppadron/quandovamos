@@ -58,13 +58,40 @@
       </label>
     </fieldset>
 
-    <div data-schedule-picker-target="timedDurationSection" class="form-control w-full max-w-xs <%= "hidden" if event.all_day? %>">
+    <% duration_value = event.duration_hours.present? ? event.duration_hours.clamp(1, 8) : 1 %>
+    <div data-schedule-picker-target="timedDurationSection" class="form-control w-full max-w-xl <%= "hidden" if event.all_day? %>">
       <%= f.label :duration_hours, t("events.form.duration_hours_label"), class: "label px-0 font-medium" %>
-      <%= f.select :duration_hours,
-            (1..23).map { |h| [ t("events.form.duration_hours_unit", count: h), h ] },
-            {},
-            class: "select select-bordered w-full rounded-2xl",
-            data: { action: "change->schedule-picker#durationChanged" } %>
+      <div class="rounded-[1.25rem] border border-base-300/60 bg-base-200/30 px-4 py-4">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <input
+            type="range"
+            min="1"
+            max="8"
+            step="1"
+            value="<%= duration_value %>"
+            class="range range-primary flex-1"
+            data-schedule-picker-target="durationRange"
+            data-action="input->schedule-picker#durationChanged change->schedule-picker#durationChanged">
+          <div class="flex items-center gap-2 sm:w-32">
+            <%= f.number_field :duration_hours,
+                  value: duration_value,
+                  min: 1,
+                  max: 8,
+                  step: 1,
+                  inputmode: "numeric",
+                  class: "input input-bordered w-full rounded-2xl text-center",
+                  data: {
+                    schedule_picker_target: "durationInput",
+                    action: "input->schedule-picker#durationChanged change->schedule-picker#durationChanged blur->schedule-picker#durationChanged"
+                  } %>
+            <span class="text-sm font-medium text-base-content/70">h</span>
+          </div>
+        </div>
+        <div class="mt-2 flex justify-between text-xs text-base-content/55">
+          <span><%= t("events.form.duration_hours_unit", count: 1) %></span>
+          <span><%= t("events.form.duration_hours_unit", count: 8) %></span>
+        </div>
+      </div>
       <p class="mt-2 text-sm text-base-content/70"><%= t("events.form.duration_hours_help") %></p>
     </div>
 
@@ -92,6 +119,16 @@
           <button type="button" class="btn btn-sm join-item rounded-r-full" title="<%= t("events.form.next_week") %>" data-action="click->schedule-picker#nextWeek">›</button>
         </div>
       </div>
+      <% if Rails.env.development? %>
+        <label class="inline-flex w-fit cursor-pointer items-center gap-3 rounded-full border border-base-300/70 bg-base-100/80 px-4 py-2 text-sm text-base-content/75 shadow-sm">
+          <input
+            type="checkbox"
+            class="toggle toggle-sm toggle-primary"
+            data-schedule-picker-target="touchOverlayToggle"
+            data-action="change->schedule-picker#touchOverlayModeChanged">
+          <span>Mostrar botoes + sempre</span>
+        </label>
+      <% end %>
       <p data-schedule-picker-target="weekTitle" class="text-sm font-medium text-center font-mono uppercase tracking-wide text-base-content/65"></p>
       <p class="text-sm text-base-content/70"><%= t("events.form.week_timed_intro") %></p>
       <div class="rounded-[1.25rem] border border-base-300/60 bg-base-200/30 p-3 sm:p-4" data-schedule-picker-target="weekGrid"></div>

@@ -41,6 +41,14 @@ class EventTest < ActiveSupport::TestCase
     assert_includes event.errors[:duration_hours], I18n.t("errors.event.duration_required")
   end
 
+  test "timed events limit duration_hours to eight hours" do
+    event = Event.new(title: "Long workshop", all_day: false, duration_hours: 9)
+    event.event_slots.build(starts_at: Time.utc(2026, 7, 1, 10, 0, 0))
+
+    assert_not event.valid?
+    assert_includes event.errors[:duration_hours], I18n.t("errors.event.duration_range")
+  end
+
   test "all day events ignore duration_hours" do
     event = Event.new(title: "Camp", all_day: true, duration_hours: 3)
     event.event_slots.build(starts_at: Time.utc(2026, 7, 1, 12, 0, 0))

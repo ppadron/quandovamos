@@ -1,12 +1,14 @@
 class Event < ApplicationRecord
-  MAX_SLOTS = 40
+  MAX_SLOTS = 20
 
   has_many :event_slots, inverse_of: :event, dependent: :destroy
   has_many :guests, dependent: :destroy
 
   validates :title, presence: true, length: { maximum: 200 }
   validates :invite_token, :organizer_token, presence: true, uniqueness: true
-  validates :duration_hours, inclusion: { in: 1..23 }, allow_nil: true
+  validates :duration_hours,
+    inclusion: { in: 1..8, message: I18n.t("errors.event.duration_range") },
+    allow_nil: true
   validate :event_slots_count_within_limit
   validate :must_have_at_least_one_slot
   validate :duration_matches_poll_type
